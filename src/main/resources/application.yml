@@ -1,0 +1,15 @@
+logging:
+  level:
+    ROOT: info
+    lv.proofit: debug
+
+spring:
+  servlet:
+    multipart:
+      maxFileSize: 100MB
+      maxRequestSize: 25MB
+
+management:
+  health:
+    jms:
+      enabled: false
