@@ -22,20 +22,21 @@ import lombok.extern.slf4j.Slf4j;
 public class PremiumControllerIT {
 
     private static String POLICY = "{\"number\":\"12-12\",\"status\":\"APPROVED\",\"insuranceObjects\":[{\"name\":\"Insurance 0\",\"insuranceSubObjects\":[{\"name\":\"sub1\",\"sum\":100.0,\"risk\":\"FIRE\"},{\"name\":\"sub2\",\"sum\":8.0,\"risk\":\"THEFT\"}]}]}";
+    
 
     @Autowired
-    private MockMvc       mvc;
-
+    private MockMvc                          mvc;
+    
     @Test
     public void test() throws Exception {
         assertTrue(true);
-
+        
         MvcResult mvcResult = this.mvc.perform(post("/calculatePremium")
                 .content(POLICY)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
-
+        
         log.debug("Server responce is -> {}", mvcResult.getResponse().getContentAsString());
     }
 

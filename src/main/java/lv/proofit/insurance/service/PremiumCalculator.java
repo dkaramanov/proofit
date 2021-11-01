@@ -4,12 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lv.proofit.insurance.model.InsuranceObject;
-import lv.proofit.insurance.model.InsuranceSubObject;
 import lv.proofit.insurance.model.PrivatePropertyPolicy;
 import lv.proofit.insurance.model.Risk;
 
@@ -23,15 +22,15 @@ public class PremiumCalculator {
         this.riskService = riskService;
     }
 
-    public Double calculate(PrivatePropertyPolicy policy) {
+    public double calculate(PrivatePropertyPolicy policy) {
         Map<Risk, BigDecimal> map = calculateAmountByRisk(policy);
 
         BigDecimal premium = new BigDecimal(0);
         for (Risk risk : map.keySet()) {
             BigDecimal amount = map.get(risk);
-            Double coefficient = riskService.getRiskCoefficient(amount.doubleValue(), risk);
+            double coefficient = riskService.getRiskCoefficient(amount.doubleValue(), risk);
 
-            BigDecimal premiumForRisk = amount.multiply(new BigDecimal(coefficient)); // .setScale(2, RoundingMode.HALF_UP);
+            BigDecimal premiumForRisk = amount.multiply(new BigDecimal(coefficient));
             premium = premium.add(premiumForRisk);
         }
 
@@ -42,9 +41,8 @@ public class PremiumCalculator {
         Map<Risk, BigDecimal> map = new HashMap<>();
 
         if (policy.getInsuranceObjects() != null) {
-            for (InsuranceObject insurance : policy.getInsuranceObjects()) {
-                if (insurance.getInsuranceSubObjects() != null) {
-                    for (InsuranceSubObject subInsurance : insurance.getInsuranceSubObjects()) {
+            policy.getInsuranceObjects().stream().flatMap(insurance -> insurance.getInsuranceSubObjects().stream()).collect(Collectors.toList()).forEach(
+                    subInsurance -> {
                         BigDecimal amount;
                         if (map.containsKey(subInsurance.getRisk())) {
                             amount = map.get(subInsurance.getRisk());
@@ -54,12 +52,9 @@ public class PremiumCalculator {
 
                         amount = amount.add(new BigDecimal(subInsurance.getSum()));
                         map.put(subInsurance.getRisk(), amount);
-                    }
-                }
-            }
+                    });
         }
 
         return map;
     }
-
 }

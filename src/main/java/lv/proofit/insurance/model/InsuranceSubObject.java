@@ -13,7 +13,7 @@ public class InsuranceSubObject {
 
     private String name;
 
-    private Double sum;
+    private double sum;
 
     private Risk   risk;
 }

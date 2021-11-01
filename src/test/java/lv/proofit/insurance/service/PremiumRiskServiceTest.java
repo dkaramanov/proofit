@@ -1,6 +1,6 @@
 package lv.proofit.insurance.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ public class PremiumRiskServiceTest {
 
     private final PremiumCalculator service   = new PremiumCalculator(new RiskCalculator());
 
-    private final Double            PREMIUM_1 = Double.valueOf(2.28);
+    private final double            PREMIUM_1 = 2.28;
 
-    private final Double            PREMIUM_2 = Double.valueOf(17.13);
+    private final double            PREMIUM_2 = 17.13;
 
     @Test
     public void checkPolicyRiskSingleInsurance() {
@@ -37,7 +37,7 @@ public class PremiumRiskServiceTest {
 
         PrivatePropertyPolicy policy = new PrivatePropertyPolicy("12-12", PolicyStatus.APPROVED, iList);
 
-        assertEquals(service.calculate(policy), PREMIUM_1);
+        assertTrue(service.calculate(policy) == PREMIUM_1);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PremiumRiskServiceTest {
 
         PrivatePropertyPolicy policy = new PrivatePropertyPolicy("12-12", PolicyStatus.APPROVED, iList);
 
-        assertEquals(service.calculate(policy), PREMIUM_2);
+        assertTrue(service.calculate(policy) == PREMIUM_2);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PremiumRiskServiceTest {
 
         PrivatePropertyPolicy policy = new PrivatePropertyPolicy("12-12", PolicyStatus.APPROVED, iList);
 
-        assertEquals(service.calculate(policy), PREMIUM_2);
+        assertTrue(service.calculate(policy) == PREMIUM_2);
     }
 
 }

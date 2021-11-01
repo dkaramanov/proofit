@@ -20,13 +20,13 @@ public class RiskCalculator {
         riskCalculators.put(Risk.THEFT, RiskType.THEFT_RISK);
     }
 
-    public Double getRiskCoefficient(Double amount, Risk risk) {
-        Double coefficient = Double.valueOf(0);
-
-        Double lastAmount = null;
+    public double getRiskCoefficient(double amount, Risk risk) {
+        double coefficient = 0;
+        double lastAmount = 0;
+        
         RiskType riskType = convert(risk);
         for (Premium premium : riskType.getPremiums()) {
-            if (amount.compareTo(premium.getAmount()) > 0 && (lastAmount == null || premium.getAmount().compareTo(lastAmount) > 0)) {
+            if (amount > premium.getAmount() && (lastAmount == 0 || premium.getAmount() > lastAmount)) {
                 lastAmount = premium.getAmount();
                 coefficient = premium.getCoefficient();
             }
@@ -41,5 +41,4 @@ public class RiskCalculator {
         }
         throw new RiskException("Not supported risk type ::: " + risk);
     }
-
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Premium {
 
-    private Double amount;
+    private double amount;
 
-    private Double coefficient;
+    private double coefficient;
 }
